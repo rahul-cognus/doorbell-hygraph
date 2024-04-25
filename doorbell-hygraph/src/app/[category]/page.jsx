@@ -22,6 +22,12 @@ async function getCategory() {
                     title
                     slug
                     excerpt
+                    author{
+                        name
+                        picture{
+                            url
+                        }
+                    }
                     coverImage {
                         id
                         url
@@ -39,7 +45,7 @@ async function getCategory() {
 }
 const Category = async ({ params }) => {
     const category = await getCategory()
-    console.log(category.posts)
+    // console.log(category);
     return (
         <>
             <section className="pt-4">
@@ -78,9 +84,10 @@ const Category = async ({ params }) => {
                             <div className="row gy-4">
                                 {/* Card item START */}
                                 {
-                                    category.posts.map((article) => (
 
-                                        <div className="col-sm-6">
+                                    category.posts.map((article, index) => (
+
+                                        <div className="col-sm-6" key={index}>
                                             <div className="card">
                                                 {/* Card img */}
                                                 <div className="position-relative">
@@ -89,12 +96,13 @@ const Category = async ({ params }) => {
                                                         {/* Card overlay bottom */}
                                                         <div className="w-100 mt-auto">
                                                             {/* Card category */}
+                                                            {console.log(article.author?.name)}
                                                             <a href={`/${params.category}`} className="badge text-bg-warning mb-2 text-capitalize"><i className="fas fa-circle me-2 small fw-bold"></i>{params.category}</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="card-body px-0 pt-3">
-                                                    <h4 className="card-title"><Link href={`/${params.category}/${article.display_url}`} className="btn-link text-reset fw-bold">{article.title}</Link></h4>
+                                                    <h4 className="card-title"><Link href={`/${params.category}/${article.slug}`} className="btn-link text-reset fw-bold">{article.title}</Link></h4>
                                                     <p className="card-text">{article.excerpt}</p>
                                                     {/* Card info */}
                                                     <ul className="nav nav-divider align-items-center d-none d-sm-inline-block">
@@ -104,7 +112,7 @@ const Category = async ({ params }) => {
                                                                     <div className="avatar avatar-xs">
                                                                         <img className="avatar-img rounded-circle" src="/images/avatar/01.jpg" alt="avatar" />
                                                                     </div>
-                                                                    <span className="ms-3">by <a href="#" className="stretched-link text-reset btn-link">Samuel</a></span>
+                                                                    <span className="ms-3">by <a href="#" className="stretched-link text-reset btn-link">{article.author?.name || 'Rahul'}</a></span>
                                                                 </div>
                                                             </div>
                                                         </li>
