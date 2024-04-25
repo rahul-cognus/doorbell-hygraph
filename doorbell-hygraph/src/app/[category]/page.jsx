@@ -1,9 +1,20 @@
 import React from 'react'
 import { GraphQLClient, gql } from 'graphql-request'
 import Link from 'next/link';
-// const graphcms = new GraphQLClient(
-//     
-// );
+import Image from 'next/image';
+import { format } from 'date-fns';
+
+
+// date format
+const formatDate = (dateString) => {
+    // Convert the input date string to a Date object
+    const date = new Date(dateString);
+
+    // Format the date in the desired format
+    const formattedDate = format(date, 'MMM dd, yyyy');
+
+    return formattedDate;
+};
 
 async function getCategory() {
     const NEXT_HYGRAPH_ENDPOINT = process.env.NEXT_HYGRAPH_ENDPOINT;
@@ -21,6 +32,7 @@ async function getCategory() {
                     posts {
                     title
                     slug
+                    date
                     excerpt
                     author{
                         name
@@ -91,13 +103,13 @@ const Category = async ({ params }) => {
                                             <div className="card">
                                                 {/* Card img */}
                                                 <div className="position-relative">
-                                                    <img className="card-img" src={article.coverImage.url} alt="Card image" />
+                                                    <Image width={307} height={230} className="card-img" src={article.coverImage.url} alt="Card image" />
                                                     <div className="card-img-overlay d-flex align-items-start flex-column p-3">
                                                         {/* Card overlay bottom */}
                                                         <div className="w-100 mt-auto">
                                                             {/* Card category */}
-                                                            {console.log(article.author?.name)}
-                                                            <a href={`/${params.category}`} className="badge text-bg-warning mb-2 text-capitalize"><i className="fas fa-circle me-2 small fw-bold"></i>{params.category}</a>
+                                                            {console.log(article.author?.picture.url)}
+                                                            {/* <a href={`/${params.category}`} className="badge text-bg-warning mb-2 text-capitalize"><i className="fas fa-circle me-2 small fw-bold"></i>{params.category}</a> */}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -110,7 +122,7 @@ const Category = async ({ params }) => {
                                                             <div className="nav-link">
                                                                 <div className="d-flex align-items-center position-relative">
                                                                     <div className="avatar avatar-xs">
-                                                                        <img className="avatar-img rounded-circle" src="/images/avatar/01.jpg" alt="avatar" />
+                                                                        <Image className="avatar-img rounded-circle" width={35} height={35} src={article.author?.picture.url || "/images/avatar/01.jpg"} alt="avatar" />
                                                                     </div>
                                                                     <span className="ms-3">by <a href="#" className="stretched-link text-reset btn-link">{article.author?.name || 'Rahul'}</a></span>
                                                                 </div>
@@ -118,19 +130,7 @@ const Category = async ({ params }) => {
                                                         </li>
 
                                                         <li className="nav-item">
-                                                            {(() => {
-                                                                // Assuming article.created_at is in the format "2024-04-14T22:59:44.960+00:00"
-                                                                const createdAtDate = new Date(article.created_at);
-
-                                                                // Check if the date is valid
-                                                                if (isNaN(createdAtDate.getTime())) {
-                                                                    // Handle invalid date
-                                                                    return 'Invalid date';
-                                                                } else {
-                                                                    // Format the date
-                                                                    return createdAtDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
-                                                                }
-                                                            })()}
+                                                            {formatDate(article.date)}
                                                         </li>
                                                     </ul>
                                                 </div>

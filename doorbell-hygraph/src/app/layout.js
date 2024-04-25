@@ -3,6 +3,7 @@ import "./globals.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "@/assets/scss/style.scss";
 import "@/assets/css/style.css";
+import "@/assets/vendor/font-awesome/css/all.min.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
